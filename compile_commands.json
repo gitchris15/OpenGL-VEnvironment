@@ -1,0 +1,17 @@
+[
+  {
+    "file": "src/glad.c",
+    "arguments": [
+      "gcc",
+      "-Iinclude",
+      "-I/opt/homebrew/include",
+      "-I/usr/local/include",
+      "-c",
+      "src/glad.c",
+      "-o",
+      "src/glad.o"
+    ],
+    "directory": "/Users/jairsebastiannarvaezmorales/Documents/Practicas-C",
+    "output": "src/glad.o"
+  }
+]
