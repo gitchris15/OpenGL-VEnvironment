@@ -4,60 +4,70 @@ Este repositorio contiene ejercicios y configuraciones base para el desarrollo d
 
 ---
 
-##  Requisitos del Sistema (macOS)
+## 📦 Gestión de Dependencias (GLFW y FreeGLUT)
 
-Para compilar este proyecto en macOS , es necesario contar con las herramientas de desarrollo de Xcode y el gestor de paquetes Homebrew.
+Este repositorio está preparado de forma inteligente para manejar las librerías gráficas (`GLFW` y `FreeGLUT`) dependiendo de tu sistema operativo:
 
-### 1. Herramientas de Desarrollo
-Instala o verifica las **Xcode Command Line Tools**:
-```bash
-# Instalar
-xcode-select --install
+### 🎮 Windows (¡Cero instalaciones extra!)
+Si usas Windows, **NO necesitas instalar ninguna librería externa**. El repositorio ya incluye las carpetas `glfw-win64` y `freeglut-MSVC` junto con sus respectivos archivos `.dll` precompilados. Simplemente clona el repositorio y compila. Todo se enlazará automáticamente y el programa funcionará de inmediato.
 
-# Verificar versión
-xcode-select --version
-```
+### 🍎 macOS / Linux (Requiere descargar librerías)
+Dado que Mac y Linux utilizan arquitecturas diferentes (y no leen archivos de Windows), los binarios incluidos no funcionarán ahí. Por lo tanto, los usuarios de estos sistemas **sí deben instalar las dependencias** a través de su gestor de paquetes.
 
-### 2. Dependencias
-Utiliza Homebrew para instalar las bibliotecas necesarias:
-```bash
-brew install glfw glm
-```
-Este comando instala las bibliotecas necesarias para compilar el proyecto.
-
----
-
-## Compilación y Ejecución
-
-| Acción | macOS / Linux | Windows |
-| :--- | :--- | :--- |
-| **Compilar** | `make` | `make` |
-| **Ejecutar** | `./app` | `.\app.exe` |
-| **Limpiar (.o)** | `make clean` | `make clean` |
-
-Primero se debe de compilar el proyecto con el comando `make`, luego se debe de ejecutar el ejecutable con el comando `./app`.
-Esto se debe de repetir cada vez que se haga un cambio en el código fuente, si no se hace esto, el ejecutable no se actualizará y no se verán los cambios.
-
-nota: si se desea limpiar los archivos .o(main.o, glad.o, etc), se debe de usar el comando `make clean`(Si ejecutamos la app sin haber compilado el programa nuevamente, el ejecutable no se actualizará y probablementa de error de "segmentation fault o archivo no encontrado").
-
-### Soporte para LSP (Autocompletado)
-Si utilizas un editor con soporte para LSP (como VS Code con clangd o Neovim), puedes generar el archivo `compile_commands.json` usando:
-```bash
-bear -- make
-```
-Este comando genera un archivo `compile_commands.json` que contiene la información necesaria para que el editor pueda proporcionar autocompletado y otras funcionalidades de LSP (como la navegación por código, saltos de definición,evitar errores de sintaxis, etc).
+#### Instalación en macOS :
+1. Instala o verifica las **Xcode Command Line Tools**:
+   ```bash
+   xcode-select --install
+   ```
+2. Instala las bibliotecas necesarias usando *Homebrew*:
+   ```bash
+   brew install glfw glm freeglut
+   ```
+*(Nota para Linux: Usa tu gestor de paquetes equivalente, por ejemplo, `sudo apt install libglfw3-dev freeglut3-dev glm`).*
 
 ---
 
-## �️ Compatibilidad con Visual Studio 2022 (Windows)
+## 🚀 Compilación y Ejecución
 
-Si necesitas entregar este proyecto a alguien que use **Visual Studio 2022** en Windows, el proyecto ya está preparado con **CMake**.
+Dependiendo de tu sistema operativo y editor de código, existen diferentes formas de compilar y ejecutar el proyecto:
 
-### Pasos para el Profesor/Usuario de Windows:
-1.  **Abrir Visual Studio 2022**.
-2.  Seleccionar **"Abrir una carpeta local"** y elegir la carpeta raíz de este proyecto.
-3.  Visual Studio detectará automáticamente el archivo `CMakeLists.txt` y configurará el proyecto.
-4.  Asegurarse de tener instalado **GLFW** a través de un gestor como `vcpkg` o tener las librerías configuradas en el sistema.
+### Opción 1: Visual Studio Code en Windows (Recomendado)
+El proyecto incluye una configuración automática para **VS Code** usando **CMake** y **Visual Studio 2022** en segundo plano.
+
+1. Asegúrate de tener instalado **Visual Studio 2022 (Community)** con las herramientas de escritorio de C++ y **Visual Studio Code**.
+2. Abre la carpeta del proyecto en VS Code.
+3. **La primera vez que lo abras**, necesitas generar la carpeta de compilación. Abre una terminal en VS Code y ejecuta lo siguiente para crear el entorno de compilación leyendo el `CMakeLists.txt`:
+   ```bash
+   "C:\Program Files\Microsoft Visual Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -B build_win -S .
+   ```
+4. Para compilar y ejecutar el proyecto rápidamente en cualquier momento, presiona:
+   **`Ctrl + Shift + B`**
+
+### Opción 2: Visual Studio 2022 en Windows
+1. Selecciona **"Abrir una carpeta local"** en la pantalla de inicio de Visual Studio 2022 y elige la carpeta raíz de este proyecto.
+2. El editor detectará el archivo `CMakeLists.txt` automáticamente.
+3. Selecciona `app.exe` como objetivo (arriba en la barra de herramientas) y presiona el botón verde de "Reproducir" para compilar y ejecutar.
+
+### Opción 3: macOS  / Linux usando Consola
+Si estás en macOS o Linux, el `Makefile` incluido está listo para usarse.
+
+1. Instala las dependencias (En macOS: `brew install glfw glm`).
+2. Abre la terminal en la carpeta raíz del proyecto.
+3. Compila el proyecto con:
+   ```bash
+   make
+   ```
+4. Ejecuta la aplicación con:
+   ```bash
+   ./app
+   ```
+*(Nota: Para limpiar los archivos binarios generados u obligar una recompilación limpia, usa el comando `make clean`)*.
+
+---
+
+### ⚠️ Importante sobre Git y GitHub
+**NO subas las carpetas de compilación (`build/`, `build_win/`) ni ejecutables (`.exe`, `.o`) a tu repositorio.**
+El proyecto ya incluye un archivo `.gitignore` que excluye estos archivos automáticamente por ti. Subir estos archivos es una mala práctica porque son muy pesados y contienen rutas locales específicas a tu computadora que no funcionarán para nadie más.
 
 ---
 

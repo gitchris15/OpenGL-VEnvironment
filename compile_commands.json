@@ -1,17 +1,30 @@
 [
   {
+    "directory": "C:/Users/jahir/Practicas-C",
+    "file": "src/main.cpp",
+    "arguments": [
+      "g++",
+      "-IC:/Users/jahir/Practicas-C/include",
+      "-IC:/Users/jahir/OneDrive/Documentos/glfw/glfw-3.4.bin.WIN64/include",
+      "-c",
+      "src/main.cpp",
+      "-o",
+      "src/main.o"
+    ],
+    "output": "src/main.o"
+  },
+  {
+    "directory": "C:/Users/jahir/Practicas-C",
     "file": "src/glad.c",
     "arguments": [
       "gcc",
-      "-Iinclude",
-      "-I/opt/homebrew/include",
-      "-I/usr/local/include",
+      "-IC:/Users/jahir/Practicas-C/include",
+      "-IC:/Users/jahir/OneDrive/Documentos/glfw/glfw-3.4.bin.WIN64/include",
       "-c",
       "src/glad.c",
       "-o",
       "src/glad.o"
     ],
-    "directory": "/Users/jairsebastiannarvaezmorales/Documents/Practicas-C",
     "output": "src/glad.o"
   }
 ]
