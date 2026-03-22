@@ -38,7 +38,7 @@ El proyecto incluye una configuración automática para **VS Code** usando **CMa
 2. Abre la carpeta del proyecto en VS Code.
 3. **La primera vez que lo abras**, necesitas generar la carpeta de compilación. Abre una terminal en VS Code y ejecuta lo siguiente para crear el entorno de compilación leyendo el `CMakeLists.txt`:
    ```bash
-   "C:\Program Files\Microsoft Visual Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -B build_win -S .
+   & "C:\Program Files\Microsoft Visual Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -B build_win -S .
    ```
 4. Para compilar y ejecutar el proyecto rápidamente en cualquier momento, presiona:
    **`Ctrl + Shift + B`**
