@@ -40,7 +40,7 @@ echo [1/3] Limpiando compilacion anterior...
 if exist build_win rmdir /s /q build_win
 
 echo [2/3] Preparando entorno de compilacion (X64)...
-"%CMAKE_EXE%" -A x64 -B build_win -S .
+"%CMAKE_EXE%" -A x64 -B build_win -S . -DCMAKE_TOOLCHAIN_FILE=C:\c++\OpenGL-VEnvironment\vcpkg\scripts\buildsystems\vcpkg.cmake
 if %errorlevel% neq 0 (
     echo.
     echo [ERROR] Fallo al configurar el proyecto.

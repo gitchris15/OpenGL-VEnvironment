@@ -33,6 +33,7 @@ endif()
 # Fuentes
 set(SOURCES
     src/main.cpp
+    src/glad.c
 )
 
 # Ejecutable
@@ -67,3 +68,7 @@ endif()
 if(MSVC)
     target_link_libraries(app opengl32.lib)
 endif()
+
+# Setup GLM from VCPKG
+find_package(glm CONFIG REQUIRED)
+target_link_libraries(app glm::glm)
