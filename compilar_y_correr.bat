@@ -1,65 +1,16 @@
 @echo off
-echo =======================================
-echo    COMPILANDO PROYECTO OPENGL
-echo =======================================
-echo.
+cd /d "C:\c++\OpenGL-VEnvironment"
+echo [1/3] Compilando proyecto...
+"C:\Program Files\Microsoft Visual Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" --build build_win --config Release
 
-:: Intentar buscar cmake en distintas ubicaciones de Visual Studio
-set "CMAKE_EXE="
-
-:: Visual Studio 2025 (v18)
-if exist "C:\Program Files\Microsoft Visual Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" (
-    set "CMAKE_EXE=C:\Program Files\Microsoft Visual Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe"
-    goto found
-)
-
-:: Visual Studio 2022 (v17)
-if exist "C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" (
-    set "CMAKE_EXE=C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe"
-    goto found
-)
-
-:: CMake global (instalado aparte)
-where cmake >nul 2>nul
 if %errorlevel% equ 0 (
-    set "CMAKE_EXE=cmake"
-    goto found
-)
-
-echo [ERROR] No se encontro CMake en tu computadora.
-echo Instala Visual Studio Community con las herramientas de C++,
-echo o instala CMake desde https://cmake.org/download/
-pause
-exit /b 1
-
-:found
-echo CMake encontrado: %CMAKE_EXE%
-echo.
-
-echo [1/3] Limpiando compilacion anterior...
-if exist build_win rmdir /s /q build_win
-
-echo [2/3] Preparando entorno de compilacion (X64)...
-"%CMAKE_EXE%" -A x64 -B build_win -S . -DCMAKE_TOOLCHAIN_FILE=C:\c++\OpenGL-VEnvironment\vcpkg\scripts\buildsystems\vcpkg.cmake
-if %errorlevel% neq 0 (
-    echo.
-    echo [ERROR] Fallo al configurar el proyecto.
+    echo [2/3] Copiando shaders...
+    if not exist "build_win\Release\src\shaders" mkdir "build_win\Release\src\shaders"
+    xcopy /y /s "src\shaders\*" "build_win\Release\src\shaders\"
+    
+    echo [3/3] Lanzando aplicacion...
+    start "" ".\build_win\Release\app.exe"
+) else (
+    echo [ERROR] La compilacion fallo.
     pause
-    exit /b %errorlevel%
 )
-
-echo.
-echo [3/3] Compilando codigo...
-"%CMAKE_EXE%" --build build_win --config Release
-if %errorlevel% neq 0 (
-    echo.
-    echo [ERROR] Fallo al compilar. Revisa los errores arriba.
-    pause
-    exit /b %errorlevel%
-)
-
-echo.
-echo =======================================
-echo    LANZANDO APLICACION...
-echo =======================================
-start "" ".\build_win\Release\app.exe"
