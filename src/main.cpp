@@ -1,4 +1,4 @@
-﻿#include <glad/glad.h>
+#include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <Shader.h>
 #include <iostream>
@@ -12,7 +12,7 @@ int main() {
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-    GLFWwindow* window = glfwCreateWindow(800, 600, "OpenGL Shaders", NULL, NULL);
+    GLFWwindow* window = glfwCreateWindow(800, 600, "Mi primera ventana en OpenGL", NULL, NULL);
     if (window == NULL) {
         std::cout << "Fallo al crear ventana GLFW" << std::endl;
         glfwTerminate();
@@ -33,8 +33,8 @@ int main() {
     // Datos del triángulo (Posición X,Y,Z + Color R,G,B)
     float vertices[] = {
          0.5f, -0.5f, 0.0f,  1.0f, 0.0f, 0.0f,  // Abajo derecha (Rojo)
-        -0.5f, -0.5f, 0.0f,  0.0f, 1.0f, 0.0f,  // Abajo izquierda (Verde)
-         0.0f,  0.5f, 0.0f,  0.0f, 0.0f, 1.0f   // Arriba (Azul)
+        -0.5f, -0.5f, 0.0f,  1.0f, 0.0f, 0.0f,  // Abajo izquierda (Verde)
+         0.0f,  0.5f, 0.0f,  1.0f, 0.0f, 0.0f   // Arriba (Azul)
     };
 
     unsigned int VBO, VAO;
@@ -55,7 +55,7 @@ int main() {
     while (!glfwWindowShouldClose(window)) {
         processInput(window);
 
-        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+        glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
         ourShader.use();
