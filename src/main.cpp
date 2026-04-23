@@ -1,83 +1,81 @@
-﻿#include <glad/glad.h>
+// PLANTILLA BASE PARA PROYECTOS "OPENGL MODERNO" (v3.3+)
+// Esto usa GLFW (Ventanas) + GLAD (Extensiones Gráficas modernas).
+// Aquí NO EXISTE glBegin ni glutSolidCube. Todo se dibuja usando 
+// Triángulos crudos enviados a la memoria de la Tarjeta Gráfica (VBO/VAO)
+// y procesados por mini-programas llamados Shaders.
+
+#include <glad/glad.h>
 #include <GLFW/glfw3.h>
-#include <Shader.h>
 #include <iostream>
 
-void framebuffer_size_callback(GLFWwindow* window, int width, int height);
-void processInput(GLFWwindow *window);
+// (AQUÍ ES DONDE AHORA VIVEN LAS MATEMÁTICAS 3D Y LAS IMÁGENES)
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
+// CONFIGURACIÓN DE LA VENTANA
+const unsigned int WIN_W = 800;
+const unsigned int WIN_H = 600;
+
+// Callback cuando el usuario cambia el tamaño de la ventana
+void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
+    glViewport(0, 0, width, height); // Ajustamos el lienzo de OpenGL
+}
+
+// Lógica de Inputs (Se checa en cada fotograma del While)
+void processInput(GLFWwindow *window) {
+    if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+        glfwSetWindowShouldClose(window, true); // Si tocas ESC, cerramos
+}
+
+
+// MAIN - CICLO MODERNO
 
 int main() {
+    // 1. Iniciar GLFW y configurar versión de OpenGL (Core Profile 3.3)
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-    GLFWwindow* window = glfwCreateWindow(800, 600, "OpenGL Shaders", NULL, NULL);
+    // 2. Crear Ventana
+    GLFWwindow* window = glfwCreateWindow(WIN_W, WIN_H, "Plantilla Moderna - GLFW + GLAD", NULL, NULL);
     if (window == NULL) {
-        std::cout << "Fallo al crear ventana GLFW" << std::endl;
+        std::cout << "Error al crear la ventana GLFW" << std::endl;
         glfwTerminate();
         return -1;
     }
     glfwMakeContextCurrent(window);
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
+    // 3. Cargar punteros mágicos de la Tarjeta de Video usando GLAD
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
-        std::cout << "Fallo al inicializar GLAD" << std::endl;
+        std::cout << "Error inicializando GLAD" << std::endl;
         return -1;
     }
 
-    // CARGAR SHADERS (Usando nuestra clase Shader.h)
-    // Nota: La ruta es relativa a la carpeta del .exe gracias al CMake actualizado
-    Shader ourShader("src/shaders/vertexshaders.glsl", "src/shaders/fragmentshaders.glsl");
+    std::cout << "--- ENTORNO MODERNO LISTO ---" << std::endl;
+    std::cout << "GLM y stb_image.h estan instaladas y listas para usarse." << std::endl;
 
-    // Datos del triángulo (Posición X,Y,Z + Color R,G,B)
-    float vertices[] = {
-         0.5f, -0.5f, 0.0f,  1.0f, 0.0f, 0.0f,  // Abajo derecha (Rojo)
-        -0.5f, -0.5f, 0.0f,  0.0f, 1.0f, 0.0f,  // Abajo izquierda (Verde)
-         0.0f,  0.5f, 0.0f,  0.0f, 0.0f, 1.0f   // Arriba (Azul)
-    };
-
-    unsigned int VBO, VAO;
-    glGenVertexArrays(1, &VAO);
-    glGenBuffers(1, &VBO);
-    glBindVertexArray(VAO);
-
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-    // Atributo de Posición
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
-    glEnableVertexAttribArray(0);
-    // Atributo de Color
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
-    glEnableVertexAttribArray(1);
-
+    // 4. EL BUCLE DE RENDERIZADO (El "Update" infinito de tu juego)
+    // A diferencia de GLUT, en GLFW TÚ tienes el control total del ciclo While:
     while (!glfwWindowShouldClose(window)) {
+        // A. LEER TECLADO
         processInput(window);
 
-        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+        // B. LÓGICA / FÍSICAS (Render)
+        // Limpiamos la pantalla con un color gris súper oscuro
+        glClearColor(0.1f, 0.1f, 0.12f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        ourShader.use();
-        glBindVertexArray(VAO);
-        glDrawArrays(GL_TRIANGLES, 0, 3);
+        // AQUÍ DIBUJARÍAS TUS VAOs (Modelos 3D modernos) ...
 
+        // C. INTERCAMBIAR BUFFERS Y LEER EVENTOS DE WINDOWS
         glfwSwapBuffers(window);
-        glfwPollEvents();
+        glfwPollEvents(); // Lee si moviste el mouse, cerraste la app, etc.
     }
 
-    glDeleteVertexArrays(1, &VAO);
-    glDeleteBuffers(1, &VBO);
-
+    // 5. Apagar todo limpio
     glfwTerminate();
     return 0;
-}
-
-void processInput(GLFWwindow *window) {
-    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-        glfwSetWindowShouldClose(window, true);
-}
-
-void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
-    glViewport(0, 0, width, height);
 }
